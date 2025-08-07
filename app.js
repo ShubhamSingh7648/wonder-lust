@@ -1,6 +1,7 @@
 // ===================================
 //      REQUIRE STATEMENTS
 // ===================================
+require('dotenv').config();
 const express = require("express");
 const mongoose = require("mongoose");
 const path = require("path");
@@ -42,23 +43,17 @@ app.use(methodOverride("_method"));
 // ===================================
 //      DATABASE CONNECTION
 // ===================================
-const mongo_url = "mongodb://127.0.0.1:27017/test";
-main()
-  .then(() => {
-    console.log("Connected to DB");
-  })
-  .catch((err) => {
-    console.log(err);
-  });
+const dbUrl = process.env.ATLAS_DB_URL;
+main().catch(err => console.log(err));
 async function main() {
-  await mongoose.connect(mongo_url);
+  await mongoose.connect(dbUrl);
 }
 
 // ===================================
 //      SESSION & AUTHENTICATION MIDDLEWARE
 // ===================================
 const sessionOptions = {
-    secret: "mysupersecretcode",
+    secret: process.env.SECRET, 
     resave: false,
     saveUninitialized: true,
     cookie: {
