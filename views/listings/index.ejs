@@ -1,0 +1,104 @@
+<% layout("/layouts/boilerplate") %>
+
+<style>
+    /* Clean styles for listing cards */
+    .listing-link, .listing-link:hover {
+        text-decoration: none;
+        color: inherit;
+    }
+    .card {
+        border: none !important;
+        margin-bottom: 2rem;
+        border-radius: 1rem !important;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        transition: transform 0.2s, box-shadow 0.2s;
+        position: relative;
+        overflow: hidden;
+    }
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+    }
+    .card-img-top {
+        border-radius: 1rem 1rem 0 0 !important;
+        width: 100% !important;
+        height: 18rem;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+    .card:hover .card-img-top {
+        transform: scale(1.05);
+    }
+    .card-body {
+        padding: 1rem !important;
+    }
+    .card-text b {
+        font-weight: 600;
+    }
+    .fav-button {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background-color: rgba(255, 255, 255, 0.9);
+        border-radius: 50%;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        z-index: 10;
+        transition: transform 0.2s;
+    }
+    .fav-button:hover {
+        transform: scale(1.1);
+    }
+    .fav-button i {
+        color: #fe424d;
+        font-size: 1.1rem;
+    }
+</style>
+
+<body>
+    <h3> </h3>
+
+    <div class="search-wrapper" style="max-width: 700px; margin: 30px auto;">
+      <form action="/listings" method="GET" class="d-flex mb-4">
+        <input 
+          type="text" 
+          name="q" 
+          placeholder="Search by title, location or country" 
+          class="form-control me-2 rounded-pill" 
+          value="<%= typeof searchTerm !== 'undefined' ? searchTerm : '' %>" 
+          style="height: 50px; font-size: 1rem;">
+         <button 
+      type="submit" 
+      class="btn" 
+      style="background-color: #fe424d; color: white; height: 50px; width: 50px; border-radius: 50%; font-size: 1rem; display: flex; align-items: center; justify-content: center;">
+      <i class="fa-solid fa-magnifying-glass"></i>
+    </button>
+      </form>
+    </div>
+    
+    <div class="row">
+        <% for(let listing of alllistings) { %>
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <a href="/listings/<%= listing._id %>" class="listing-link">
+                    <div class="card">
+                        <div class="fav-button">
+                            <i class="fa-regular fa-heart"></i>
+                        </div>
+                        <img src="<%= listing.image %>" class="card-img-top" alt="listing-image">
+                        <div class="card-body">
+                           <p class="card-text">
+    <b><%= listing.title %></b> <br />
+    <%- listing.price ? '&#8377;' + listing.price.toLocaleString("en-IN") + ' / night' : 'Price not available' %>
+</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        <% } %>
+    </div>
+</body>

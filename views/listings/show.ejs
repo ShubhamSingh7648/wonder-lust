@@ -1,0 +1,166 @@
+<% layout("/layouts/boilerplate") -%>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  body { font-family: 'Inter', sans-serif; }
+  .reservation-card { background: white; border-radius: 1rem; box-shadow: 0 4px 12px rgba(0,0,0,0.1); position: sticky; top: 100px; z-index: 100; }
+  .reserve-btn { background: linear-gradient(to right, #ff3366, #ff0055); border: none; }
+  .amenities-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; padding: 0; list-style: none; }
+  .amenities-list li { display: flex; align-items: center; }
+  .rating-summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 1.5rem; text-align: center; padding-top: 2rem; border-top: 1px solid #e0e0e0; }
+  .rating-summary .rating-item i { font-size: 1.5rem; margin-bottom: 0.5rem; }
+
+  .star-rating {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+  }
+  .star-rating input[type="radio"] {
+    display: none;
+  }
+  .star-rating label {
+    font-size: 2rem;
+    color: #e0e0e0;
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+  .star-rating input[type="radio"]:checked ~ label,
+  .star-rating label:hover,
+  .star-rating label:hover ~ label {
+    color: #ffc107;
+  }
+  .static-stars {
+    color: #ffc107;
+    font-size: 0.9rem;
+  }
+  </style>
+
+<div class="container py-5">
+  <div class="row">
+    <div class="col-lg-8 mb-4">
+        <h1 class="fw-semibold display-6 mb-3"><%= listing.title %></h1>
+        <p class="fs-5 mb-1"><strong>Room in <%= listing.location %>, <%= listing.country %></strong></p>
+        
+        <div class="my-4">
+            <img src="<%= listing.image %>" class="img-fluid rounded-4 shadow-sm" style="width: 100%; height: auto; max-height: 500px; object-fit: cover;" alt="listing image">
+        </div>
+        <hr>
+
+        <h4 class="mt-4 mb-3">About this place</h4>
+        <p class="text-muted"><%= listing.description %></p>
+        <hr>
+
+        <h4 class="mt-4 mb-3">What this place offers</h4>
+        <ul class="amenities-list">
+            <li><i class="fa-solid fa-door-closed"></i>Lock on bedroom door</li>
+            <li><i class="fa-solid fa-seedling"></i>Garden view</li>
+            <li><i class="fa-solid fa-kitchen-set"></i>Kitchen</li>
+            <li><i class="fa-solid fa-wifi"></i>Wifi</li>
+            <li><i class="fa-solid fa-square-parking"></i>Free parking on premises</li>
+            <li><i class="fa-solid fa-elevator"></i>Lift</li>
+            <li><i class="fa-solid fa-snowflake"></i>Air conditioning</li>
+            <li><i class="fa-solid fa-video"></i>Exterior security cameras on property</li>
+        </ul>
+        <button class="btn btn-outline-secondary mt-3">Show all amenities</button>
+        <hr class="my-4">
+
+        <% if (currentUser) { %>
+            <h4>Leave a Review</h4>
+            <form action="/listings/<%= listing._id %>/reviews" method="POST" class="needs-validation mb-4" novalidate>
+                <div class="mb-3">
+                    <label class="form-label">Rating</label>
+                    <div class="star-rating">
+                        <input type="radio" id="rating5" name="review[rating]" value="5" required /><label for="rating5">★</label>
+                        <input type="radio" id="rating4" name="review[rating]" value="4" /><label for="rating4">★</label>
+                        <input type="radio" id="rating3" name="review[rating]" value="3" /><label for="rating3">★</label>
+                        <input type="radio" id="rating2" name="review[rating]" value="2" /><label for="rating2">★</label>
+                        <input type="radio" id="rating1" name="review[rating]" value="1" /><label for="rating1">★</label>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="comment" class="form-label">Comment</label>
+                    <textarea name="review[comment]" id="comment" rows="4" class="form-control" required></textarea>
+                </div>
+                <button class="btn btn-dark">Submit Review</button>
+            </form>
+            <hr>
+        <% } %>
+        
+        <h4><i class="fas fa-star me-1"></i> All Reviews</h4>
+        <% if (listing.reviews && listing.reviews.length > 0) { %>
+            <div class="my-4">
+                <h3 class="fw-bold"><i class="fa-solid fa-leaf text-success"></i> Guest favourite</h3>
+                <p class="text-muted">One of the most-loved homes on Wanderlust, according to guests.</p>
+                <div class="rating-summary">
+                    <div class="rating-item"><p>Cleanliness</p><p class="fw-bold">5.0</p><i class="fa-solid fa-soap"></i></div>
+                    <div class="rating-item"><p>Accuracy</p><p class="fw-bold">4.9</p><i class="fa-solid fa-check-circle"></i></div>
+                    <div class="rating-item"><p>Check-in</p><p class="fw-bold">4.9</p><i class="fa-solid fa-key"></i></div>
+                    <div class="rating-item"><p>Communication</p><p class="fw-bold">5.0</p><i class="fa-solid fa-comment"></i></div>
+                    <div class="rating-item"><p>Location</p><p class="fw-bold">4.5</p><i class="fa-solid fa-map-marker-alt"></i></div>
+                    <div class="rating-item"><p>Value</p><p class="fw-bold">4.9</p><i class="fa-solid fa-tags"></i></div>
+                </div>
+            </div>
+            <hr>
+            <div class="row mt-3">
+                <% for(let review of listing.reviews) { %>
+                    <div class="col-md-6 mb-4">
+                        <div class="d-flex">
+                            <div class="me-3"><i class="fas fa-user-circle fa-2x text-secondary"></i></div>
+                            <div class="w-100">
+                                <h6 class="fw-bold mb-0"><%= review.author.username %></h6>
+                                <div class="static-stars mb-2"><% for(let i=1; i<=5; i++){ %> <%= i <= review.rating ? '★' : '☆' %> <% } %></div>
+                                <p><%= review.comment %></p>
+                                <% if (currentUser && currentUser._id.equals(review.author._id)) { %>
+                                    <form method="POST" action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE">
+                                        <button class="btn btn-sm btn-outline-danger">Delete</button>
+                                    </form>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                <% } %>
+            </div>
+        <% } else { %>
+            <p class="mt-3">No reviews yet. Be the first to leave one!</p>
+        <% } %>
+
+        </div>
+
+    <div class="col-lg-4">
+        <div class="p-4 reservation-card">
+            <h4 class="fw-bold mb-3">
+                ₹<%= listing.price.toLocaleString("en-IN") %>
+                <small class="text-muted fw-normal">per night</small>
+            </h4>
+            <hr>
+            <form method="POST" action="/listings/<%= listing._id %>/bookings">
+                <div class="mb-3">
+                    <label for="checkin" class="form-label text-uppercase small">Check-in</label>
+                    <input type="date" id="checkin" class="form-control rounded-3" name="booking[checkin]" required />
+                </div>
+                <div class="mb-3">
+                    <label for="checkout" class="form-label text-uppercase small">Check-out</label>
+                    <input type="date" id="checkout" class="form-control rounded-3" name="booking[checkout]" required />
+                </div>
+                <div class="mb-4">
+                    <label for="guests" class="form-label text-uppercase small">Guests</label>
+                    <select id="guests" class="form-select rounded-3" name="booking[guests]">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                    </select>
+                </div>
+                <button class="btn reserve-btn w-100 py-2 rounded-3 text-white mb-2">Reserve</button>
+                <p class="text-center text-muted small">You won't be charged yet</p>
+            </form>
+            <hr>
+            <div class="text-center mt-2">
+                <button class="btn btn-link text-muted text-decoration-none small">
+                    <i class="fa-regular fa-flag me-1"></i>Report this listing
+                </button>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,144 @@
+/*
+    Sticky Footer ke liye CSS changes
+    Sticky footer ka matlab hai ki footer hamesha page ke bottom mein chipka rahega,
+    chahe page ka content kam ho ya zyada.
+*/
+
+html, body {
+    /* HTML aur Body ko poori height do taaki flexbox sahi kaam kare */
+    height: 100%;
+}
+
+body {
+    /* Body ko flex container banao */
+    display: flex;
+    /* Content ko vertically stack karo */
+    flex-direction: column;
+    
+    background-color: #f7f7f7;
+    font-family: "Plus Jakarta Sans", sans-serif !important;
+}
+
+
+.container {
+    /* Yeh .container jo boilerplate.ejs mein hai, woh poori available space lega
+       aur footer ko neeche push kar dega.
+    */
+    flex: 1;
+}
+
+
+.navbar{
+    height: 5rem;
+    background-color: white;
+    /* box-shadow: 0 2px 4px rgba(0,0,0,0.1); ek halka shadow add kiya */
+}
+
+.fa-compass {
+    color: #fe424d;
+    font-size: 2rem;
+}
+.nav-link {
+    color: #222222 !important;
+}
+.f-info-links a {
+    text-decoration: none;
+    color: #222222;
+}
+.f-info-links a:hover {
+    text-decoration: underline;
+}
+.f-info {
+    text-align: center;
+    height: 8rem;
+    background-color: #ebedeb;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    padding-top: 1rem;
+}
+.f-info-socials, .f-info-brand, .f-info-links {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+}
+.f-info-socials i {
+    font-size: 1.2rem;
+    margin-right: 1rem;
+    transition: color 0.3s ease;
+}
+.f-info-socials i:hover {
+    color: #fe424d;
+}
+.listing-link {
+   text-decoration: none;
+   color: inherit;
+}
+.card {
+    border: none !important;
+    margin-bottom: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+}
+.card-img-top {
+    border-radius: 1rem !important;
+    width: 100% !important;
+    height: 20rem;
+    object-fit: cover;
+}
+.card-body {
+    padding: 1rem !important;
+}
+.card-text p {
+    font-weight: 400 !important;
+}
+.add-btn, .edit-btn, .delete-btn {
+    background: #fe424d !important;
+    border: none !important;
+    color: white;
+    transition: background-color 0.3s;
+}
+.add-btn:hover, .edit-btn:hover, .delete-btn:hover {
+    background-color: #d83c44 !important;
+}
+.show-image {
+    height: 30vh;
+    border-radius: 1rem;
+    object-fit: cover;
+}
+.btns {
+    display: flex;
+    gap: 1rem;
+}
+.show-card {
+    padding-left: 0;
+    padding-right: 0;
+}
+.row-cols-lg-3 .card {
+    margin: 1rem;
+}
+
+/* purane CSS rules ko remove kiya taaki naye rules override na hon */
+/*
+html, body {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    flex: 1 !important;
+}
+
+footer {
+    margin-top: auto !important;
+}
+*/
